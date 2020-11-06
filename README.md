@@ -27,7 +27,8 @@ func main() {
 ```
 
 ## Sample without passing around a log.Logger object
-```
+
+```go
 
 import (
 	logger "github.com/dukeofdisaster/simplelog/pkg/logger"
