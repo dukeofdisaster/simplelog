@@ -26,6 +26,21 @@ func main() {
 2020/11/03 16:16:45 DBUG: DEBUG FROM IMPORT
 ```
 
+## Sample without passing around a log.Logger object
+```
+
+import (
+	logger "github.com/dukeofdisaster/simplelog/pkg/logger"
+)
+var MY_LOG  = "/tmp/testlog.log"
+func main() {
+	logger.SetLogger(MY_LOG)
+	logger.Infos("Hello from import")
+	logger.Warns("WARNING FROM IMPORT")
+	logger.Debugs("DEBUG FROM IMPORT")
+}
+
+```
 ## TODO
 - use ISO timestamps
 - make a better way to log instead of passing the logger each time
