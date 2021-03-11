@@ -27,7 +27,6 @@ func main() {
 ```
 
 ## Sample without passing around a log.Logger object
-
 ```go
 
 import (
@@ -42,6 +41,28 @@ func main() {
 }
 
 ```
+
+## Sample with IOS8601 Timestamps
+```go
+package main
+
+import (
+	"fmt"
+	logger "github.com/dukeofdisaster/simplelog/pkg/logger"
+)
+
+func main() {
+	logger.SetLoggerUtc("/var/log/wiplogs/curator.log")
+	logger.Inf("TEST LOG")
+	logger.Wrn("warning message")
+	logger.Dbg("debug message")
+}
+```
+- the above gives the following log file
+```
+2021-03-11T01:44:12.47Z [INFO] TEST LOG
+2021-03-11T01:44:12.47Z [WARN] warning message
+2021-03-11T01:44:12.47Z [DEBUG] debug message
+```
 ## TODO
-- use ISO timestamps
-- make a better way to log instead of passing the logger each time
+- other time formats
