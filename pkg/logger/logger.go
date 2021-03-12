@@ -50,12 +50,12 @@ func SetLogger(filepath string) {
 func SetLoggerUtc(filepath string) {
    UTC_LOGGER = new(LocalWriter)
    UTC_LOGGER.DestLog = filepath
+   log.SetFlags(log.Lshortfile)
+   log.SetOutput(UTC_LOGGER)
 }
 
 func Inf(msg string) {
     if UTC_LOGGER != nil {
-        log.SetFlags(0)
-        log.SetOutput(UTC_LOGGER)
         log.Println("[INFO] "+msg)
     } else {
         panic(ERR_NIL_UTC_LOGGER)
@@ -64,8 +64,6 @@ func Inf(msg string) {
 
 func Wrn(msg string) {
     if UTC_LOGGER != nil {
-        log.SetFlags(0)
-        log.SetOutput(UTC_LOGGER)
         log.Println("[WARN] "+msg)
     } else {
         panic(ERR_NIL_UTC_LOGGER)
@@ -74,8 +72,6 @@ func Wrn(msg string) {
 
 func Dbg(msg string) {
     if UTC_LOGGER != nil {
-        log.SetFlags(0)
-        log.SetOutput(UTC_LOGGER)
         log.Println("[DEBUG] "+msg)
     } else {
         panic(ERR_NIL_UTC_LOGGER)
