@@ -66,3 +66,7 @@ func main() {
 ```
 ## TODO
 - other time formats
+- add tests
+    - what happens when we call a utc logging function (Inf(),Dbg(),Wrn()) with non-utc local writer?
+- add error logging
+    - should probably take an error directly
