@@ -2,9 +2,12 @@ package logger
 
 import (
     "fmt"
+    "errors"
     "io"
     "log"
     "os"
+    "path"
+    "syscall"
     "time"
 )
 
@@ -24,7 +27,7 @@ func (writer *LocalWriter) Write(bytes []byte) (int,error) {
     f,err := os.OpenFile(writer.DestLog,os.O_APPEND|os.O_CREATE|os.O_WRONLY,0644)
     defer f.Close()
     if err != nil {
-        panic(err)
+        return 1, err
     }
     ws := io.WriteString
     msg := string(bytes)
@@ -39,52 +42,71 @@ func GetLogger(filepath string) (*log.Logger) {
     return(log.New(f,"",log.LstdFlags))
 }
 
-func SetLogger(filepath string) {
+func SetLogger(filepath string) error {
     f, err := os.OpenFile(filepath, os.O_APPEND|os.O_CREATE |os.O_WRONLY, 0644)
     if err != nil {
-        panic(err)
+        return err
     }
     CURRENT_LOGGER = log.New(f,"",log.LstdFlags)
+    return nil
+}
+/*
+    Amounts to SetOutput, which doesn't return err in std lib
+*/
+func SetLoggerUtc(filepath string) error {
+    dir := path.Dir(filepath)
+    err := syscall.Access(dir, syscall.O_RDWR)
+    if err != nil {
+        return err
+    }
+    err = syscall.Access(filepath, syscall.O_RDWR)
+    if err != nil {
+        return err
+    }
+    UTC_LOGGER = new(LocalWriter)
+    UTC_LOGGER.DestLog = filepath
+    log.SetFlags(log.Lshortfile)
+    log.SetOutput(UTC_LOGGER)
+    return nil
 }
 
-func SetLoggerUtc(filepath string) {
-   UTC_LOGGER = new(LocalWriter)
-   UTC_LOGGER.DestLog = filepath
-   log.SetFlags(log.Lshortfile)
-   log.SetOutput(UTC_LOGGER)
-}
 
-func Inf(msg string) {
+func Inf(msg string) error {
     if UTC_LOGGER != nil {
-        log.Println("[INFO] "+msg)
+        log.Println("[INFO] "+args...)
+        return nil
     } else {
-        panic(ERR_NIL_UTC_LOGGER)
-    } 
-}
-
-func Wrn(msg string) {
-    if UTC_LOGGER != nil {
-        log.Println("[WARN] "+msg)
-    } else {
-        panic(ERR_NIL_UTC_LOGGER)
-    } 
-}
-
-func Dbg(msg string) {
-    if UTC_LOGGER != nil {
-        log.Println("[DEBUG] "+msg)
-    } else {
-        panic(ERR_NIL_UTC_LOGGER)
-    } 
-}
-
-func Err(e error) {
-    if UTC_LOGGER != nil {
-        log.Println("[ERROR] "+e.Error())
-    } else {
-        panic(ERR_NIL_UTC_LOGGER)
+        return errors.New(ERR_NIL_UTC_LOGGER)
     }
 }
+
+func Wrn(msg string) error {
+    if UTC_LOGGER != nil {
+        log.Println("[WARN] "+msg)
+        return nil
+    } else {
+        return errors.New(ERR_NIL_UTC_LOGGER)
+    }
+}
+
+func Dbg(msg string) error {
+    if UTC_LOGGER != nil {
+        log.Println("[DEBUG] "+msg)
+        return nil
+    } else {
+        return errors.New(ERR_NIL_UTC_LOGGER)
+    }
+}
+
+func Err(e error) error {
+    if UTC_LOGGER != nil {
+        log.Println("[ERROR] "+e.Error())
+        return nil
+    } else {
+        return errors.New(ERR_NIL_UTC_LOGGER)
+    }
+}
+
 /* Log with global logger after calling SetLogger */
 func Infos(msg string) {
     if CURRENT_LOGGER !=  nil {
