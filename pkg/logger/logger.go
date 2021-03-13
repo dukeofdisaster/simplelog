@@ -77,6 +77,14 @@ func Dbg(msg string) {
         panic(ERR_NIL_UTC_LOGGER)
     } 
 }
+
+func Err(e error) {
+    if UTC_LOGGER != nil {
+        log.Println("[ERROR] "+e.Error())
+    } else {
+        panic(ERR_NIL_UTC_LOGGER)
+    }
+}
 /* Log with global logger after calling SetLogger */
 func Infos(msg string) {
     if CURRENT_LOGGER !=  nil {
