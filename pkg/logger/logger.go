@@ -73,7 +73,7 @@ func SetLoggerUtc(filepath string) error {
 
 func Inf(msg string) error {
     if UTC_LOGGER != nil {
-        log.Println("[INFO] "+args...)
+        log.Println("[INFO] "+msg)
         return nil
     } else {
         return errors.New(ERR_NIL_UTC_LOGGER)
