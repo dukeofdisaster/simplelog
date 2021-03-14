@@ -17,8 +17,8 @@ var badPaths = []struct {
 	// expected result
 	expected []string
 }{
-	{"/noexist", []string{"read-only", "denied", "Shouldn't"}},
-	{"/", []string{"read-only", "denied", "Shouldn't"}},
+	{"/noexist", []string{"read-only", "denied", "wont"}},
+	{"/", []string{"read-only", "denied", "wont"}},
 	{"/noexist/noexist/test.log", []string{"no such"}},
 }
 
