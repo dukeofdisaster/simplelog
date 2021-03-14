@@ -59,10 +59,15 @@ func SetLoggerUtc(filepath string) error {
     if err != nil {
         return err
     }
+    /*
+    - erroring out on non existent filepaths 
+    - isn't expected behavior, as long as the dir exists and we
+    have permissions, should be fine
     err = syscall.Access(filepath, syscall.O_RDWR)
     if err != nil {
         return err
     }
+    */
     UTC_LOGGER = new(LocalWriter)
     UTC_LOGGER.DestLog = filepath
     log.SetFlags(log.Lshortfile)
