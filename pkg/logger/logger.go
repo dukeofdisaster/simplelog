@@ -58,7 +58,7 @@ func SetLoggerUtc(filepath string) error {
 	}
 	err := syscall.Access(dir, syscall.O_RDWR)
 	if err != nil {
-		return fmt.Errorf("SetLoggerUtc(): syscall.Acces(): %s %v", dir, err)
+		return fmt.Errorf("SetLoggerUtc(): syscall.Acces(): %s %v", filepath, err)
 	}
 	UTC_LOGGER = new(LocalWriter)
 	UTC_LOGGER.DestLog = filepath
@@ -107,6 +107,7 @@ func Err(e error) error {
 func Infos(msg string) error {
 	if CURRENT_LOGGER != nil {
 		CURRENT_LOGGER.Println("INFO: " + msg)
+        return nil
 	} else {
 		return errors.New(ERR_NIL_LOGGER)
 	}
@@ -114,6 +115,7 @@ func Infos(msg string) error {
 func Warns(msg string) error {
 	if CURRENT_LOGGER != nil {
 		CURRENT_LOGGER.Println("WARN: " + msg)
+        return nil
 	} else {
 		return errors.New(ERR_NIL_LOGGER)
 	}
@@ -121,6 +123,7 @@ func Warns(msg string) error {
 func Debugs(msg string) error {
 	if CURRENT_LOGGER != nil {
 		CURRENT_LOGGER.Println("DEBUG: " + msg)
+        return nil
 	} else {
 		return errors.New(ERR_NIL_LOGGER)
 	}
