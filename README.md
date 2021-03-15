@@ -64,9 +64,33 @@ func main() {
 2021-03-11T01:44:12.47Z [WARN] warning message
 2021-03-11T01:44:12.47Z [DEBUG] debug message
 ```
+
+## Testing
+Current testing implemented
+```
+user@box:~/gitstuff/simplelog/tests$
+/home/user/gitstuff/simplelog/tests
+user@box:~/gitstuff/simplelog/tests$ go test -v 
+=== RUN   TestSetLoggerUtc_ShouldReturnErrs
+--- PASS: TestSetLoggerUtc_ShouldReturnErrs (0.00s)
+=== RUN   TestSetLoggerUtc_InfWithBadPathShouldReturnErr
+--- PASS: TestSetLoggerUtc_InfWithBadPathShouldReturnErr (0.00s)
+=== RUN   TestInf_ValidInputWithNoSetLoggerUtcShouldReturnErr
+--- PASS: TestInf_ValidInputWithNoSetLoggerUtcShouldReturnErr (0.00s)
+=== RUN   TestWrn_ValdidInputWithNoSetLoggerUtcShouldReturnErr
+--- PASS: TestWrn_ValdidInputWithNoSetLoggerUtcShouldReturnErr (0.00s)
+=== RUN   TestDbg_ValdidInputWithNoSetLoggerUtcShouldReturnErr
+--- PASS: TestDbg_ValdidInputWithNoSetLoggerUtcShouldReturnErr (0.00s)
+=== RUN   TestErr_ValdidInputWithNoSetLoggerUtcShouldReturnErr
+--- PASS: TestErr_ValdidInputWithNoSetLoggerUtcShouldReturnErr (0.00s)
+=== RUN   TestInf_ShouldContainInfInBrackets
+--- PASS: TestInf_ShouldContainInfInBrackets (0.00s)
+PASS
+ok  	/home/user/gitstuff/simplelog/tests	0.003s
+```
+
 ## TODO
 - other time formats
-- add tests
-    - what happens when we call a utc logging function (Inf(),Dbg(),Wrn()) with non-utc local writer?
-- add error logging
-    - should probably take an error directly
+- cosider making utc logging functions panic on err; err := logger.Inf() is an annoying pattern,
+and there'es potential to mask the bug, however std log doesn't lib
+doesn't return any errors, so could go either way.

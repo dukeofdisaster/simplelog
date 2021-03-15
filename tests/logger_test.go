@@ -1,14 +1,16 @@
 package logger_test
 
 import (
+	//"bufio"
 	"errors"
 	"fmt"
-	"github.com/dukeofdisaster/simplelog/pkg/logger"
 	"io"
 	"os"
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/dukeofdisaster/simplelog/pkg/logger"
 )
 
 var badPaths = []struct {
@@ -86,20 +88,20 @@ func TestErr_ValdidInputWithNoSetLoggerUtcShouldReturnErr(t *testing.T) {
 
 func TestInf_ShouldContainInfInBrackets(t *testing.T) {
 	current_year := fmt.Sprintf("%v", time.Now().Year())
-	stdoutPath := "/tmp/simplelog.test"
-	err := logger.SetLoggerUtc(stdoutPath)
+	logPath := "/tmp/simplelog.test"
+	err := logger.SetLoggerUtc(logPath)
 	if err != nil {
-		t.Errorf("unable to use val: %s, as path to stdout, got err: %v", stdoutPath, err)
+		t.Errorf("unable to use val: %s, as path to stdout, got err: %v", logPath, err)
 	}
 	logger.Inf("test stdout")
-	f, err := os.Open(stdoutPath)
+	f, err := os.Open(logPath)
 	defer f.Close()
 	if err != nil {
 		t.Errorf("unable to open stdout path as file")
 	}
-	buf_four := make([]byte, 4)
-	_, err = io.ReadAtLeast(f, buf_four, 4)
-	if string(buf_four) != current_year {
-		t.Errorf("expected bytes not in output: %s", buf_four)
+	buf := make([]byte, 45)
+	_, err = io.ReadAtLeast(f, buf, 45)
+	if !strings.Contains(string(buf), current_year) || !strings.Contains(string(buf), "[INFO]") {
+		t.Errorf("expected bytes not in output: %s", buf)
 	}
 }
