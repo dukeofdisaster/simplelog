@@ -105,20 +105,20 @@ ok  	/home/user/gitstuff/simplelog/tests	0.003s
     keeping the functions, but then checking the flags, return error if
     calling Inf()/Warn()/Dbg()/Err() 
     - see example below
-```
-current:
---- some src file with line numbers ---
-23 logger.SetLoggerUtc("some/file/path")
-24 // here we expect line 25 to appear in the log
-25 loggern.Inf("test")
-26 log.Println("[INFO] test")
----
+    ```
+    current:
+    --- some src file with line numbers ---
+    23 logger.SetLoggerUtc("some/file/path")
+    24 // here we expect line 25 to appear in the log
+    25 loggern.Inf("test")
+    26 log.Println("[INFO] test")
+    ---
 
 
-gives:
-2021-03-19T17:30:13.072Z logger.go:81: [INFO] test
-2021-03-19T17:30:13.721Z main.go:16: [INFO] test
-```
+    gives:
+    2021-03-19T17:30:13.072Z logger.go:81: [INFO] test
+    2021-03-19T17:30:13.721Z main.go:16: [INFO] test
+    ```
 
     - so any use of shortfile without direct calls to log.Println() (if you expect the
     line number in the log to be relevant to the flow in main, 
