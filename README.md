@@ -119,11 +119,13 @@ gives:
 2021-03-19T17:30:13.072Z logger.go:81: [INFO] test
 2021-03-19T17:30:13.721Z main.go:16: [INFO] test
 ```
+
     - so any use of shortfile without direct calls to log.Println() (if you expect the
     line number in the log to be relevant to the flow in main, 
     say after some err or important process) is pointless
     - the same is true even if you use a local wrapper; the line number in the log
     could be 10s or 100s of lines away from where its relevant
+
 ```
 example:
 --- some src file with line numbers ---
@@ -139,6 +141,7 @@ gives:
 2021-03-19T17:30:13.721Z main.go:31: [INFO] test
 ---
 ```
+
 - other time formats
 - cosider making utc logging functions panic on err; err := logger.Inf() is an annoying pattern,
 and there'es potential to mask the bug, however std log doesn't lib
