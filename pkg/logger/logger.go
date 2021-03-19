@@ -15,7 +15,7 @@ type LocalWriter struct {
 	DestLog string
 }
 
-var ISO_8601_FMT = "2006-01-02T15:04:05.999Z"
+var ISO_8601_FMT = "2006-01-02T15:04:05.000Z"
 var DEFAULT = "/var/log/simplelogger.log"
 var CURRENT_LOGGER *log.Logger = nil
 var UTC_LOGGER *LocalWriter = nil
