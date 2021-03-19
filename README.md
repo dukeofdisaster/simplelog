@@ -90,7 +90,57 @@ ok  	/home/user/gitstuff/simplelog/tests	0.003s
 ```
 
 ## TODO
+- DITCH SHORTFILE?
+    - after using this in a different project I realized the shortfile behavior
+    is undesirable when using shortfile; with logger.Inf()/Wrn()/Ddbg()/Err()
+    the line number that shows up is the the line number from the function
+    declaration in logger.go
+    - if the SetLoggerUtc() is used, and you call log.Println() from the
+    std lib, the ISO8601 timestamp is still used and the line # is then
+    the correct one, i.e. the location of the call in main.go or wherever.
+    - so it seems the Inf()/Wrn()/Dbg()/Err() functions are pointless at this
+    point in time if the desire is to have line numbers relevant to your
+    actual sorce code. 
+    - The only way forward seems like maybe setLoggerUtcStd() and then
+    keeping the functions, but then checking the flags, return error if
+    calling Inf()/Warn()/Dbg()/Err() 
+    - see example below
+```
+current:
+--- some src file with line numbers ---
+23 logger.SetLoggerUtc("some/file/path")
+24 // here we expect line 25 to appear in the log
+25 loggern.Inf("test")
+26 log.Println("[INFO] test")
+---
+
+
+gives:
+2021-03-19T17:30:13.072Z logger.go:81: [INFO] test
+2021-03-19T17:30:13.721Z main.go:16: [INFO] test
+```
+    - so any use of shortfile without direct calls to log.Println() (if you expect the
+    line number in the log to be relevant to the flow in main, 
+    say after some err or important process) is pointless
+    - the same is true even if you use a local wrapper; the line number in the log
+    could be 10s or 100s of lines away from where its relevant
+```
+example:
+--- some src file with line numbers ---
+30 func myWarningWrapper(s string) {
+31    log.Println(s)
+32 }
+        --- snip ---
+78 // somewhere in main
+29 myWarningWrapper("hello world")
+
+
+gives:
+2021-03-19T17:30:13.721Z main.go:31: [INFO] test
+---
+```
 - other time formats
 - cosider making utc logging functions panic on err; err := logger.Inf() is an annoying pattern,
 and there'es potential to mask the bug, however std log doesn't lib
 doesn't return any errors, so could go either way.
+
